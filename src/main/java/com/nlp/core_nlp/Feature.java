@@ -24,8 +24,13 @@ public class Feature {
 	static OpenIE open = new OpenIE();
 	static CoreNlp core = new CoreNlp();
 	static String text = null;
+	
+	ClassLoader classLoader = getClass().getClassLoader();	
+	final File folder = new File(classLoader.getResource("test").getFile());
+	
 
 	public static void listFilesForFolder(final File folder) throws IOException {
+		
 		for (final File fileEntry : folder.listFiles()) {
 			if (fileEntry.isDirectory()) {
 				listFilesForFolder(fileEntry);
@@ -46,9 +51,8 @@ public class Feature {
 
 	public static void main(String[] args) throws IOException {
 
-		final File folder = new File("C:\\UTA\\Spring 19\\2192-CSE-5328-001-SFWR ENGR TEAM PROJECT I\\corenlpinputs");
-		listFilesForFolder(folder);
-
+		
+		listFilesForFolder(new Feature().folder);
 	}
 
 }
