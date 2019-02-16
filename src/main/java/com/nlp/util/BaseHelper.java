@@ -1,19 +1,14 @@
 package com.nlp.util;
 
-
 import org.apache.commons.lang3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 public abstract class BaseHelper {
-	
-	//TODO rb felles SharedState her
-	//TODO rb felles FixtureUtils her
 
 	protected void checkValidValue(String value, String purpose) {
 		if (StringUtils.isBlank(value)) {
-			throw new HelperException(purpose + " kan ikke være tom");
+			throw new HelperException(purpose + " cannot be null");
 		}
 	}
 	
