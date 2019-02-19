@@ -28,12 +28,12 @@ public class ClassifiedSentence {
 	public String toString() {
 		
 		String result = null;
-		result = "SENTENCE,WORD,POS,NER,SUBJECT,PREDICATE,OBJECT \n";
+		result = "SENTENCE|WORD|POS|NER|SUBJECT|PREDICATE|OBJECT \n";
 		for(ClassificationCoreLabel corelabel : listOfClassificationCoreLabel) {
 			for(ClassificationTriple triple : listOfClassificationTriple) {
 				result = result + "" + sentence + "|"
 						+ corelabel.getWord() + "|" + corelabel.getPos() + "|" + corelabel.getNer() + "|"
-								+ "|" + triple.getSubject() + "|" + triple.getPredicate() + "|" + triple.getObject() + "\n";
+								+ "" + triple.getSubject() + "|" + triple.getPredicate() + "|" + triple.getObject() + "\n";
 			}
 		}
 		return result;

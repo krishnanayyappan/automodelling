@@ -5,9 +5,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Time;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Properties;
+
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import com.nlp.util.ClassifiedSentence;
 import com.nlp.util.FileHelper;
@@ -31,7 +38,8 @@ public class Feature_merged {
 	static CoreNlp core = new CoreNlp();
 	static String line = null;
 	static FileHelper fileHelper = new FileHelper();
-	
+	static Date date = new Date();
+		
 	public static final String PROPERTIESLIST = "tokenize,ssplit,pos,lemma,depparse,natlog,openie";
 	
 	ClassLoader classLoader = getClass().getClassLoader();	
@@ -143,7 +151,12 @@ public class Feature_merged {
 		String content = "\n";
 		for(ClassifiedSentence cs : listOfClassifiedSentences)
 			content = content + cs.toString()+ "\n ----------\n";
-		fileHelper.saveToFile(content, "result", "\\output.txt", "UTF-8");
+		
+		DateTime dt = new DateTime(date);
+		DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd-HH-mm");
+		String outputFilename = "\\output"+dt.toString(dtf)+".csv";
+		
+		fileHelper.saveToFile(content, "result", outputFilename, "UTF-8");
 		
 	}
 

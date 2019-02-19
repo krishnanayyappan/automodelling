@@ -1,16 +1,21 @@
 package com.nlp.util;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.UnsupportedCharsetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.opencsv.CSVWriter;
 
 public class FileHelper extends BaseHelper {
 	
@@ -23,11 +28,31 @@ public class FileHelper extends BaseHelper {
 			logErrorAndThrowException("content is null");
 		}
 
-		File file = makeAbsoluteFile(baseDir, fileName);
-		verifyFileExists(file);
+		//File file = makeAbsoluteFile(baseDir, fileName);
+		FileWriter file = makeAbsoluteFileWriter(baseDir, fileName);
+		//verifyFileExists(file);
 		
+		List<String[]> data = new ArrayList<String[]>(); 
+
+		CSVWriter writer = new CSVWriter(file, '|', 
+                CSVWriter.NO_QUOTE_CHARACTER, 
+                CSVWriter.DEFAULT_ESCAPE_CHARACTER, 
+                CSVWriter.DEFAULT_LINE_END); 
+		
+		String[] arrayContent = content.split("\n");
+
+        for (int i = 0; i < arrayContent.length; i++) { 
+            String row = arrayContent[i]; 
+            String[] rowdata = row.split("\\|"); 
+            data.add(rowdata); 
+        } 
+        
 		try {
-			FileUtils.writeStringToFile(file, content, encoding, true);
+			//FileUtils.writeStringToFile(file, content, encoding, true);
+			writer.writeAll(data); 
+			  
+            // closing writer connection 
+            writer.close(); 
 		} catch (IOException|UnsupportedCharsetException e) {
 			logErrorAndThrowException("Couldn't save input text to file: ", e);
 		}
@@ -47,21 +72,40 @@ public class FileHelper extends BaseHelper {
 		}
 	}
 	
-	public File makeAbsoluteFile(String baseDir, String fileName) {
+	public FileWriter makeAbsoluteFileWriter(String baseDir, String fileName) {
 		
 		File absBaseDir = makeAbsoluteFile(baseDir);
+		File file = new File(absBaseDir+fileName);
 		
-		File f = new File(absBaseDir+fileName);
-		boolean bool = false;
+		/*try {
+			file.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}*/
+		FileWriter outputfile = null;
 		try {
-			bool = f.createNewFile();
+			outputfile = new FileWriter(file, true);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} 
+
+		return outputfile;
+		
+	}
+	
+	public File makeAbsoluteFile(String baseDir, String fileName) {
+		
+		File absBaseDir = makeAbsoluteFile(baseDir);
+		File file = new File(absBaseDir+fileName);
+		
+		try {
+			file.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		System.out.println("\n\nFile created: "+bool+"\n\n");
-		 
-		return f;
+
+		return file;
 		
 	}
 
