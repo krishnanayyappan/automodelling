@@ -109,20 +109,27 @@ public class Feature_merged {
 						// Annotate an example document.						
 						Annotation annotation = new Annotation(line);
 						pipeline.annotate(annotation);
+						
+						
+
 	
 						// Loop over sentences in the document
 						int sentenceNo = 0;
 						for (CoreMap sentence : annotation.get(CoreAnnotations.SentencesAnnotation.class)) {
+							System.out.println("\n############################## NEXT SENTENCE #########################\n");
+							System.out.println("\nSentence is #" + ++sentenceNo + ": " + sentence.get(CoreAnnotations.TextAnnotation.class)+"\n");
+							
 							classifiedSentence.setSentence(sentence.toString());
 							classifiedSentenceAfterAnalysis.setSentence(sentence.toString());
 							
 							listOfClassificationPerWord = new ArrayList<ClassificationCoreLabel>();
+							
 							for (CoreLabel token : sentence.get(CoreAnnotations.TokensAnnotation.class)) {
 				                String word = token.get(CoreAnnotations.TextAnnotation.class);
 				                String pos = token.get(CoreAnnotations.PartOfSpeechAnnotation.class);
 				                String ner = token.get(CoreAnnotations.NamedEntityTagAnnotation.class);
 	
-				                System.out.println(String.format("Print: Word: [%s] POS: [%s] NER: [%s]", word, pos, ner));
+				                System.out.println(String.format("Print Word, its parts of speech and named entity: [%s] POS: [%s] NER: [%s]", word, pos, ner));
 				                
 				                nlpMap.put(word, pos);
 				                
@@ -131,10 +138,10 @@ public class Feature_merged {
 				                
 				            }
 							
-							System.out.println("\nSentence #" + ++sentenceNo + ": " + sentence.get(CoreAnnotations.TextAnnotation.class));
+							
 	
 							// Print SemanticGraph
-							System.out.println(sentence.get(SemanticGraphCoreAnnotations.EnhancedDependenciesAnnotation.class)
+							System.out.println("\n"+sentence.get(SemanticGraphCoreAnnotations.EnhancedDependenciesAnnotation.class)
 									.toString(SemanticGraph.OutputFormat.LIST));
 	
 							// Get the OpenIE triples for the sentence
@@ -157,7 +164,8 @@ public class Feature_merged {
 								isObject = true;
 								isSubject = true;
 								isRelation = true;
-								for(String subject : oieSubjectArray) {
+								//Removing the part of code which decides which sentence to be in final result.
+								/*for(String subject : oieSubjectArray) {
 									if (! nlpMap.get(subject).contains("NN")) {
 										System.out.println("This is line is not included as a subject : "+triple.subjectGloss());
 										isSubject = false;
@@ -179,7 +187,7 @@ public class Feature_merged {
 										isRelation = false;
 										break;
 									}									
-								}
+								}*/
 								subjectAfterAnalysis="";
 								objectAfterAnalysis="";
 								relationAfterAnalysis="";
@@ -203,7 +211,8 @@ public class Feature_merged {
 							classifiedSentence.setListClassificationCoreLabel(listOfClassificationPerWord);
 							classifiedSentence.setListClassificationTriple(listOfClassificationTriple);
 							
-							listOfClassifiedSentences.add(classifiedSentence);
+							//Commenting code that writes results to a csv file
+							/*listOfClassifiedSentences.add(classifiedSentence);
 							writeClassifiedSentencesToFile(listOfClassifiedSentences, "output1");
 							
 							System.out.println("Finished writing to output1");
@@ -214,7 +223,7 @@ public class Feature_merged {
 								listOfClassifiedSentencesAfterAnalysis.add(classifiedSentenceAfterAnalysis);
 								writeClassifiedSentencesToFile(listOfClassifiedSentencesAfterAnalysis, "outputAfterAnalysis2");
 								System.out.println("Finished writing to outputAfterAnalysis2");
-							}
+							}*/
 						}
 					}
 					
@@ -229,7 +238,8 @@ public class Feature_merged {
 		
 	}
 
-	private static void writeClassifiedSentencesToFile(ArrayList<ClassifiedSentence> listOfClassifiedSentences, String fileName) {
+	//commenting code that writes classified sentences to file
+	/*private static void writeClassifiedSentencesToFile(ArrayList<ClassifiedSentence> listOfClassifiedSentences, String fileName) {
 		String content = "\n";
 		for(ClassifiedSentence cs : listOfClassifiedSentences)
 			content = content + cs.toString()+ "\n ----------\n";
@@ -240,14 +250,8 @@ public class Feature_merged {
 		
 		fileHelper.saveToFile(content, "result", outputFilename, "UTF-8");
 		
-	}
+	}*/
 	
-	private static void writeFinalResultToFile() {
-		
-		
-		
-	}
-
 	private static String getFileWithRelativePath(final File folder, final File file) {
 		return folder + "\\" + file.getName();
 	}

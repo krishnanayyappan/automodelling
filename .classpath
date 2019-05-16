@@ -26,5 +26,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/J146851/Downloads/stanford-ner-2018-10-16/stanford-ner-2018-10-16/stanford-ner.jar"/>
 	<classpathentry kind="lib" path="C:/Users/J146851/Downloads/stanford-ner-2018-10-16/stanford-ner-2018-10-16/stanford-ner-3.9.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/J146851/Downloads/stanford-openie-src.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
